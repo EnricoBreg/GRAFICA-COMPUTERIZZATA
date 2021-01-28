@@ -82,6 +82,9 @@ void display(void) {
 
     glTranslatef(-3.0, 16.7, -31.0);
 
+    
+    /* Superficie del tavolo */
+
     glBindVertexArray(vao[4]);
     
     for(indFace = 0; indFace < NFACES; indFace++) {
@@ -89,8 +92,8 @@ void display(void) {
                     4,                                                  // count
                     GL_UNSIGNED_INT,                                    // type
                     (GLvoid *)(indFace * NVERTICES * sizeof(GLuint)));  // indices
-    }                                              
-
+    }                                        
+    
     glPopMatrix();
 
     glPopMatrix();

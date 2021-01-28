@@ -113,7 +113,7 @@ void display(void)
     glTranslatef(0.0, 0.0, -1.5);
     glTranslatef(0.0, -.8, 0.0);
     glRotatef(30.0, 0.0, 1.0, 0.0);
-    glRotatef(25.0, 1.0, 0.0, 0.0);
+    glRotatef(50.0, 1.0, 0.0, 0.0);
 
     // bind the vertex arrat object for the cube
     glBindVertexArray(vao[0]);
