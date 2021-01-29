@@ -9,29 +9,55 @@
 #include <cglm/cglm.h>
 #include <math.h>
 
-typedef struct Vertex {
-    float coords[4]; // Coordinate omogenee
-    float colors[4]; // RGBA
+/**
+ * 4 vertices per face
+*/
+#define N_VERTICES 4
+
+/**
+ * 4 faces to draw
+*/
+#define N_FACES 4
+
+static float Xangle = 0.0, Yangle = 0.0, Zangle = 0.0;
+
+typedef struct Vertex
+{
+    float coords[N_VERTICES]; // Coordinate omogenee
+    float colors[N_VERTICES]; // RGBA
 } Vertex;
 
 /** Vertici per una faccia del quadrato */
-static Vertex squareVertices[8] = {
-    
-    /** Prima faccia */
-    { { 0.5, -0.5, -0.5, 1.0 },     { 1.0, 0.0, 0.0, 1.0 } },
-    { { 0.5, 0.5,  -0.5, 1.0 },     { 1.0, 1.0, 0.0, 1.0 } },
-    { { -0.5, -0.5,-0.5, 1.0 },     { 0.0, 0.0, 1.0, 1.0 } },
-    { { -0.5, 0.5, -0.5, 1.0 },     { 0.0, 1.0, 0.0, 1.0 } },
+static Vertex squareVertices[N_VERTICES * N_FACES] = {
 
-    /** Seconda faccia */
-    { { -0.5, -0.5, 0.5, 1.0 },   { 1.0, 0.0, 0.0, 1.0 } },
-    { { -0.5, 0.5, 0.5, 1.0 },    { 1.0, 0.0, 0.0, 1.0 } },
-    { { -0.5, -0.5, -0.5, 1.0 },  { 1.0, 0.0, 0.0, 1.0 } },
-    { { -0.5, 0.5, -0.5, 1.0 },   { 1.0, 0.0, 0.0, 1.0 } }
+    /** Third face */
+    { {-0.5, -0.5, 0.5, 1.0},    {0.0, 1.0, 0.0, 1.0} },
+    { {-0.5, 0.5, 0.5, 1.0},     {0.0, 1.0, 0.0, 1.0} },
+    { {0.5, -0.5, 0.5, 1.0},     {0.0, 1.0, 0.0, 1.0} },
+    { {0.5, 0.5, 0.5, 1.0},      {0.0, 1.0, 0.0, 1.0} },
+    
+    /** First face */
+    { {0.5, -0.5, -0.5, 1.0},    {1.0, 0.0, 0.0, 1.0} },
+    { {0.5, 0.5, -0.5, 1.0},     {1.0, 0.0, 0.0, 1.0} },
+    { {-0.5, -0.5, -0.5, 1.0},   {1.0, 0.0, 0.0, 1.0} },
+    { {-0.5, 0.5, -0.5, 1.0},    {1.0, 0.0, 0.0, 1.0} },
+
+    /** Fourth face */
+    { {0.5, -0.5, -0.5, 1.0 },   {1.0, 1.0, 0.0, 1.0} },
+    { {0.5, 0.5, -0.5, 1.0 },    {1.0, 1.0, 0.0, 1.0} },
+    { {0.5, -0.5, 0.5, 1.0 },    {1.0, 1.0, 0.0, 1.0} },
+    { {0.5, 0.5, 0.5, 1.0 },     {1.0, 1.0, 0.0, 1.0} },
+
+    /** Second face */
+    { {-0.5, -0.5, 0.5, 1.0},    {0.0, 0.0, 1.0, 1.0} },
+    { {-0.5, 0.5, 0.5, 1.0},     {0.0, 0.0, 1.0, 1.0} },
+    { {-0.5, -0.5, -0.5, 1.0},   {0.0, 0.0, 1.0, 1.0} },
+    { {-0.5, 0.5, -0.5, 1.0},    {0.0, 0.0, 1.0, 1.0} }
 
 };
 
-typedef struct Matrix4x4 {
+typedef struct Matrix4x4
+{
     float entries[16];
 } Matrix4x4;
 
@@ -41,23 +67,31 @@ static vec4 modelViewMatrix[4];
 static vec4 projMatrix[4];
 
 static unsigned int programID, vertexShaderID, fragmentShaderID, modelViewMatLoc,
-        projMatLoc, buffer[1], vao[1];
-
+    projMatLoc, buffer[1], vao[1];
 
 /** Display routine */
-void display(void) {
-    glClear(GL_COLOR_BUFFER_BIT);
+void display(void)
+{
 
-    glm_rotate(modelViewMatrix, 30.0, (vec3){0.0, 1.0, 0.0});
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glm_mat4_identity(modelViewMatrix);
+
+    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, -1.0});
+    glm_rotate(modelViewMatrix, Xangle, (vec3){1.0, 0.0, 0.0});
+    glm_rotate(modelViewMatrix, Yangle, (vec3){0.0, 1.0, 0.0});
+    glm_rotate(modelViewMatrix, Zangle, (vec3){0.0, 0.0, 1.0});
+    glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, N_VERTICES * N_FACES);
     glFlush();
 }
 
 // Function to read text file.
-char* readTextFile(char* aTextFile)
+char *readTextFile(char *aTextFile)
 {
-    FILE* filePointer = fopen(aTextFile, "rb");
-    char* content = NULL;
+    FILE *filePointer = fopen(aTextFile, "rb");
+    char *content = NULL;
     long numVal = 0;
 
     // estimate buffer length
@@ -65,7 +99,7 @@ char* readTextFile(char* aTextFile)
     numVal = ftell(filePointer);
 
     fseek(filePointer, 0L, SEEK_SET);
-    content = (char*) malloc((numVal+1) * sizeof(char));
+    content = (char *)malloc((numVal + 1) * sizeof(char));
     fread(content, 1, numVal, filePointer);
     content[numVal] = '\0';
     fclose(filePointer);
@@ -73,24 +107,25 @@ char* readTextFile(char* aTextFile)
 }
 
 /** Init Routine */
-void init(void) {
-    
+void init(void)
+{
+
     glClearColor(1.0, 1.0, 1.0, 0.0);
 
     /** 
      * Creazione e compilazione del Vertex Shader
     */
-    char* vertexShader = readTextFile("vertexShader.glsl");
+    char *vertexShader = readTextFile("vertexShader.glsl");
     vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShaderID, 1, (const char**)&vertexShader, NULL);
+    glShaderSource(vertexShaderID, 1, (const char **)&vertexShader, NULL);
     glCompileShader(vertexShaderID);
-    
+
     /** 
      * Creazione e compilazione del Fragment Shader
     */
     char *fragmentShader = readTextFile("fragmentShader.glsl");
     fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShaderID, 1, (const char**)&fragmentShader, NULL);
+    glShaderSource(fragmentShaderID, 1, (const char **)&fragmentShader, NULL);
     glCompileShader(fragmentShaderID);
 
     /**
@@ -110,11 +145,11 @@ void init(void) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(squareVertices), squareVertices, GL_STATIC_DRAW);
 
     /**
-     * Specifico come sono costruiti i dati nell'array dove sono salvati
+     * Specifico come sono costruiti i dati all'interno dell'array dove sono salvati
     */
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[0]), 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[1]), (GLvoid*)sizeof(squareVertices[0].coords));
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[1]), (GLvoid *)sizeof(squareVertices[0].coords));
     glEnableVertexAttribArray(1);
 
     /**
@@ -132,7 +167,7 @@ void init(void) {
     };*/
 
     projMatLoc = glGetUniformLocation(programID, "projMat");
-    glm_frustum(-1.0, 1.0, -1.0, 1.0, 0.2, 1.0, projMatrix);
+    glm_frustum(-1.0, 1.0, -1.0, 1.0, 0.2, 10.0, projMatrix);
     glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, (GLfloat *)projMatrix);
 
     /**
@@ -141,17 +176,73 @@ void init(void) {
      * Caricamento della modelViewMatrix nella GPU nella variabile definita da modelViewMatLoc
     */
     vec4 modelViewMatrix[4] = {
-        { 1.0, 0.0, 0.0, 0.0 },
-        { 0.0, 1.0, 0.0, 0.0 },
-        { 0.0, 0.0, 1.0, 0.0 },
-        { 0.0, 0.0, 0.0, 1.0 }
-    };
+        {1.0, 0.0, 0.0, 0.0},
+        {0.0, 1.0, 0.0, 0.0},
+        {0.0, 0.0, 1.0, 0.0},
+        {0.0, 0.0, 0.0, 1.0}};
     modelViewMatLoc = glGetUniformLocation(programID, "modelViewMat");
     glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
 }
 
-int main(int argc, char** argv) {
-    
+/**
+ * Input key processing routine
+*/
+void keyInput(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 27:
+        exit(0);
+        break;
+    case 'x':
+        Xangle += (5.0 / 360.0) * (2.0 * M_PI);
+        if (Xangle > (2.0 * M_PI))
+            Xangle -= 2.0 * M_PI;
+        glutPostRedisplay();
+        break;
+    case 'X':
+        Xangle -= (5.0 / 360.0) * (2.0 * M_PI);
+        if (Xangle < 0.0)
+            Xangle += 2.0 * M_PI;
+        glutPostRedisplay();
+        break;
+    case 'y':
+        Yangle += (5.0 / 360.0) * (2.0 * M_PI);
+        if (Yangle > 2.0 * M_PI)
+            Yangle -= 2.0 * M_PI;
+        glutPostRedisplay();
+        break;
+    case 'Y':
+        Yangle -= (5.0 / 360.0) * (2.0 * M_PI);
+        if (Yangle < 0.0)
+            Yangle += 2.0 * M_PI;
+        glutPostRedisplay();
+        break;
+    case 'z':
+        Zangle += (5.0 / 360.0) * (2.0 * M_PI);
+        if (Zangle > 2.0 * M_PI)
+            Zangle -= 2.0 * M_PI;
+        glutPostRedisplay();
+        break;
+    case 'Z':
+        Zangle -= (5.0 / 360.0) * (2.0 * M_PI);
+        if (Zangle < 0.0)
+            Zangle += 2.0 * M_PI;
+        glutPostRedisplay();
+        break;
+    default:
+        break;
+    }
+}
+
+int main(int argc, char **argv)
+{
+    /**
+     * Prompt
+    */
+    printf("Interazioni: \n");
+    printf("Premi i tasti x, X, y, Y, z, Z per girare la scena.\n");
+
     glutInit(&argc, argv);
 
     /**
@@ -161,11 +252,14 @@ int main(int argc, char** argv) {
     glutInitContextProfile(GLUT_CORE_PROFILE);
     glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 
+    glEnable(GL_DEPTH_TEST);
+
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(150, 150);
     glutCreateWindow("Prova Cubo Pseudo-Rubik");
     glutDisplayFunc(display);
+    glutKeyboardFunc(keyInput);
 
     glewInit();
 
@@ -175,8 +269,6 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
-
 
 /*
 // define vertices
