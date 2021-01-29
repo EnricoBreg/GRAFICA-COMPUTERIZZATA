@@ -17,8 +17,10 @@
 /**
  * 4 faces to draw
 */
-#define N_FACES 4
+#define N_FACES 6
 
+static float ZtranslationValue = -1.0;
+static float XtranslationValue = 0.0;
 static float Xangle = 0.0, Yangle = 0.0, Zangle = 0.0;
 
 typedef struct Vertex
@@ -30,29 +32,47 @@ typedef struct Vertex
 /** Vertici per una faccia del quadrato */
 static Vertex squareVertices[N_VERTICES * N_FACES] = {
 
-    /** Third face */
-    { {-0.5, -0.5, 0.5, 1.0},    {0.0, 1.0, 0.0, 1.0} },
-    { {-0.5, 0.5, 0.5, 1.0},     {0.0, 1.0, 0.0, 1.0} },
-    { {0.5, -0.5, 0.5, 1.0},     {0.0, 1.0, 0.0, 1.0} },
-    { {0.5, 0.5, 0.5, 1.0},      {0.0, 1.0, 0.0, 1.0} },
-    
     /** First face */
-    { {0.5, -0.5, -0.5, 1.0},    {1.0, 0.0, 0.0, 1.0} },
-    { {0.5, 0.5, -0.5, 1.0},     {1.0, 0.0, 0.0, 1.0} },
-    { {-0.5, -0.5, -0.5, 1.0},   {1.0, 0.0, 0.0, 1.0} },
-    { {-0.5, 0.5, -0.5, 1.0},    {1.0, 0.0, 0.0, 1.0} },
 
-    /** Fourth face */
-    { {0.5, -0.5, -0.5, 1.0 },   {1.0, 1.0, 0.0, 1.0} },
-    { {0.5, 0.5, -0.5, 1.0 },    {1.0, 1.0, 0.0, 1.0} },
-    { {0.5, -0.5, 0.5, 1.0 },    {1.0, 1.0, 0.0, 1.0} },
-    { {0.5, 0.5, 0.5, 1.0 },     {1.0, 1.0, 0.0, 1.0} },
+    { {0.5, 0.5, 0.5, 1.0},   {0.0, 1.0, 0.0, 1.0} },
+    { {-0.5, -0.5, 0.5, 1.0},    {0.0, 1.0, 0.0, 1.0} },
+    { {-0.5, 0.5, 0.5, 1.0},    {0.0, 1.0, 0.0, 1.0} },
+    { {0.5, -0.5, 0.5, 1.0},     {0.0, 1.0, 0.0, 1.0} },
 
     /** Second face */
-    { {-0.5, -0.5, 0.5, 1.0},    {0.0, 0.0, 1.0, 1.0} },
-    { {-0.5, 0.5, 0.5, 1.0},     {0.0, 0.0, 1.0, 1.0} },
-    { {-0.5, -0.5, -0.5, 1.0},   {0.0, 0.0, 1.0, 1.0} },
-    { {-0.5, 0.5, -0.5, 1.0},    {0.0, 0.0, 1.0, 1.0} }
+
+    { {0.5, -0.5, 0.5, 1.0},   {1.0, 1.0, 0.0, 1.0} },
+    { {0.5, 0.5, -0.5, 1.0},    {1.0, 1.0, 0.0, 1.0} },
+    { {0.5, 0.5, 0.5, 1.0},    {1.0, 1.0, 0.0, 1.0} },
+    { {0.5, -0.5, -0.5, 1.0},     {1.0, 1.0, 0.0, 1.0} },
+
+    /** Lower face */
+
+    { {0.5, -0.5, -0.5, 1.0},   {1.0, 0.0, 0.0, 1.0} },
+    { {-0.5, -0.5, 0.5, 1.0},   {1.0, 0.0, 0.0, 1.0} },
+    { {0.5, -0.5, 0.5, 1.0},    {1.0, 0.0, 0.0, 1.0} },
+    { {-0.5, -0.5, -0.5, 1.0},  {1.0, 0.0, 0.0, 1.0} },
+
+    /** Third face */
+
+    { {-0.5, -0.5, -0.5, 1.0},  {0.0, 0.0, 0.0, 1.0} },
+    { {-0.5, 0.5, 0.5, 1.0},    {0.0, 0.0, 0.0, 1.0} },
+    { {-0.5, -0.5, 0.5, 1.0},   {0.0, 0.0, 0.0, 1.0} },
+    { {-0.5, 0.5, -0.5, 1.0},   {0.0, 0.0, 0.0, 1.0} },  
+
+    /** Fourth face */
+ 
+    { {-0.5, 0.5, -0.5, 1.0},   {0.0, 0.0, 1.0, 1.0} },
+    { {0.5, -0.5, -0.5, 1.0},   {0.0, 0.0, 1.0, 1.0} },
+    { {-0.5, -0.5, -0.5, 1.0},  {0.0, 0.0, 1.0, 1.0} },
+    { {0.5, 0.5, -0.5, 1.0},    {0.0, 0.0, 1.0, 1.0} },
+
+    /** Lower face */
+  
+    { {0.5, 0.5, -0.5, 1.0},    {1.0, 0.0, 1.0, 1.0} },
+    { {-0.5, 0.5, 0.5, 1.0},    {1.0, 0.0, 1.0, 1.0} },
+    { {0.5, 0.5, 0.5, 1.0},     {1.0, 0.0, 1.0, 1.0} },
+    { {-0.5, 0.5, -0.5, 1.0},   {1.0, 0.0, 1.0, 1.0} }
 
 };
 
@@ -72,17 +92,22 @@ static unsigned int programID, vertexShaderID, fragmentShaderID, modelViewMatLoc
 /** Display routine */
 void display(void)
 {
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm_mat4_identity(modelViewMatrix);
 
-    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, -1.0});
+    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, ZtranslationValue});
+    glm_translate(modelViewMatrix, (vec3){XtranslationValue, 0.0, 0.0,});
     glm_rotate(modelViewMatrix, Xangle, (vec3){1.0, 0.0, 0.0});
     glm_rotate(modelViewMatrix, Yangle, (vec3){0.0, 1.0, 0.0});
     glm_rotate(modelViewMatrix, Zangle, (vec3){0.0, 0.0, 1.0});
     glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
-
+/*
+    int i;
+    for(i = 0; i < N_FACES; i++){
+         glDrawArrays(GL_TRIANGLE_STRIP, i, N_VERTICES);
+    }
+    */
     glDrawArrays(GL_TRIANGLE_STRIP, 0, N_VERTICES * N_FACES);
     glFlush();
 }
@@ -149,7 +174,7 @@ void init(void)
     */
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[0]), 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[1]), (GLvoid *)sizeof(squareVertices[0].coords));
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[1]), (GLvoid *)sizeof(squareVertices[1].colors));
     glEnableVertexAttribArray(1);
 
     /**
@@ -160,8 +185,7 @@ void init(void)
     /*Matrix4x4 projMatrix = {
         {
             1.0, 0.0, 0.0, 0.0,
-            0.0, 1.0, 0.0, 0.0,
-            0.0, 0.0, -2.0, -1.0,
+            0.0, 1.0, 0.0, 0.0,//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             0.0, 0.0, 0.0, 1.0
         }
     };*/
@@ -235,6 +259,23 @@ void keyInput(unsigned char key, int x, int y)
     }
 }
 
+/**
+ * Input key for scene translation
+*/
+void translationKeyInput(int key, int x, int y)
+{
+
+    if (key == GLUT_KEY_DOWN)
+        ZtranslationValue -= 0.01;
+    if (key == GLUT_KEY_UP)
+        ZtranslationValue += 0.01;
+    if (key == GLUT_KEY_RIGHT)
+        XtranslationValue += 0.01;
+    if (key == GLUT_KEY_LEFT)
+        XtranslationValue -= 0.01;
+    glutPostRedisplay();
+}
+
 int main(int argc, char **argv)
 {
     /**
@@ -242,6 +283,7 @@ int main(int argc, char **argv)
     */
     printf("Interazioni: \n");
     printf("Premi i tasti x, X, y, Y, z, Z per girare la scena.\n");
+    printf("Premi UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW  per traslare la scena.\n");
 
     glutInit(&argc, argv);
 
@@ -252,14 +294,17 @@ int main(int argc, char **argv)
     glutInitContextProfile(GLUT_CORE_PROFILE);
     glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 
+    /*
     glEnable(GL_DEPTH_TEST);
-
+    glDepthFunc(GL_ALWAYS);
+    */
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(150, 150);
     glutCreateWindow("Prova Cubo Pseudo-Rubik");
     glutDisplayFunc(display);
     glutKeyboardFunc(keyInput);
+    glutSpecialFunc(translationKeyInput);
 
     glewInit();
 
