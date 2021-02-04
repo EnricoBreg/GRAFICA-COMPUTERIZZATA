@@ -100,19 +100,19 @@ void display(void)
     glm_rotate(modelViewMatrix, Zangle, (vec3){0.0, 0.0, 1.0});
     glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
 
-    /*
     int i;
-    for(i = 0; i < 4; i++){
-        glDrawArrays(GL_TRIANGLE_STRIP, i * N_FACES, N_VERTICES);
+    for(i = 0; i < N_FACES; i++){
+        glDrawArrays(GL_TRIANGLE_STRIP, i * N_VERTICES, N_VERTICES);
     }
-    */
 
+    /*
     glDrawArrays(GL_TRIANGLE_STRIP, 0, N_VERTICES);
     glDrawArrays(GL_TRIANGLE_STRIP, 4, N_VERTICES);
     glDrawArrays(GL_TRIANGLE_STRIP, 8, N_VERTICES);
     glDrawArrays(GL_TRIANGLE_STRIP, 12, N_VERTICES);
     glDrawArrays(GL_TRIANGLE_STRIP, 16, N_VERTICES);
     glDrawArrays(GL_TRIANGLE_STRIP, 20, N_VERTICES);
+    */
     
     glFlush();
 }
