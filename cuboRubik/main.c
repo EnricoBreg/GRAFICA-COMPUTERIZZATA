@@ -37,31 +37,31 @@ typedef struct Vertex
 /** Vertici per una faccia del quadrato */
 static Vertex squareVertices[N_VERTICES * N_FACES] = {
     
-    //front
-    { {0.0, 0.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} },
-    { {0.0, 1.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} },
-    { {1.0, 0.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} },
-    { {1.0, 1.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} },
+    //front, ok
+    { {1.0, 0.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} }, //c
+    { {1.0, 1.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} }, //d
+    { {0.0, 0.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} }, //a
+    { {0.0, 1.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} }, //b
 
     //right
-    { {1.0, 0.0, 1.0, 1.0},    {1.0, 0.0, 1.0, 1.0} },
-    { {1.0, 1.0, 1.0, 1.0},    {1.0, 0.0, 1.0, 1.0} },
-    { {1.0, 0.0, 0.0, 1.0},    {1.0, 0.0, 1.0, 1.0} },
-    { {1.0, 1.0, 0.0, 1.0},    {1.0, 0.0, 1.0, 1.0} }, 
+    { {1.0, 1.0, 1.0, 1.0},    {1.0, 0.0, 1.0, 1.0} }, //d
+    { {1.0, 0.0, 1.0, 1.0},    {1.0, 0.0, 1.0, 1.0} }, //c
+    { {1.0, 1.0, 0.0, 1.0},    {1.0, 0.0, 1.0, 1.0} }, //f
+    { {1.0, 0.0, 0.0, 1.0},    {1.0, 0.0, 1.0, 1.0} }, //e
 
-    //back
+    //back, ok
     { {0.0, 0.0, 0.0, 1.0},    {0.0, 1.0, 0.0, 1.0} },
     { {0.0, 1.0, 0.0, 1.0},    {0.0, 1.0, 0.0, 1.0} },
     { {1.0, 0.0, 0.0, 1.0},    {0.0, 1.0, 0.0, 1.0} },
     { {1.0, 1.0, 0.0, 1.0},    {0.0, 1.0, 0.0, 1.0} }, 
 
-    //left
-    { {0.0, 0.0, 0.0, 1.0},    {0.0, 1.0, 1.0, 1.0} },
-    { {0.0, 1.0, 0.0, 1.0},    {0.0, 1.0, 1.0, 1.0} },
-    { {0.0, 0.0, 1.0, 1.0},    {0.0, 1.0, 1.0, 1.0} },
-    { {0.0, 1.0, 1.0, 1.0},    {0.0, 1.0, 1.0, 1.0} },
+    //left, ok
+    { {0.0, 0.0, 1.0, 1.0},    {0.0, 1.0, 1.0, 1.0} }, //a
+    { {0.0, 1.0, 1.0, 1.0},    {0.0, 1.0, 1.0, 1.0} }, //b
+    { {0.0, 0.0, 0.0, 1.0},    {0.0, 1.0, 1.0, 1.0} }, //g
+    { {0.0, 1.0, 0.0, 1.0},    {0.0, 1.0, 1.0, 1.0} }, //h
 
-    //over
+    //over, ok
     { {0.0, 1.0, 0.0, 1.0},    {0.0, 0.0, 0.0, 1.0} },
     { {0.0, 1.0, 1.0, 1.0},    {0.0, 0.0, 0.0, 1.0} }, 
     { {1.0, 1.0, 0.0, 1.0},    {0.0, 0.0, 0.0, 1.0} },
@@ -149,6 +149,12 @@ void init(void) {
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
 
+    /**
+     * enabling cullig
+    */
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+
     /** 
      * Creazione e compilazione del Vertex Shader
     */
@@ -184,9 +190,9 @@ void init(void) {
     /**
      * Specifico come sono costruiti i dati all'interno dell'array dove sono salvati
     */
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[0]), 0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_TRUE, sizeof(squareVertices[0]), 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[1]), (GLvoid *)sizeof(squareVertices[1].coords));  
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(squareVertices[1]), (GLvoid *)sizeof(squareVertices[1].coords));  
     glEnableVertexAttribArray(1);
 
     /**
@@ -221,6 +227,7 @@ void init(void) {
 
     };*/
     modelViewMatLoc = glGetUniformLocation(programID, "modelViewMat");
+    glm_mat4_identity(modelViewMatrix);
     glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
 }
 
