@@ -10,6 +10,11 @@
 #include <math.h>
 
 /**
+ * Number of cubes
+*/
+#define N_CUBES 2
+
+/**
  * 4 vertices per face
 */
 #define N_VERTICES 4
@@ -80,7 +85,7 @@ typedef struct Matrix4x4 {
 } Matrix4x4;
 
 static unsigned int programID, vertexShaderID, fragmentShaderID, modelViewMatLoc,
-    projMatLoc, buffer[1], vao[1];
+    projMatLoc, buffer[N_CUBES], vao[N_CUBES];
 
 /** 
   * Display routine 
@@ -93,7 +98,7 @@ void display(void)
 
     glm_translate(modelViewMatrix, (vec3){0.0, 0.0, ZtranslationValue});
     glm_translate(modelViewMatrix, (vec3){XtranslationValue, 0.0, 0.0,});
-    glm_translate(modelViewMatrix, (vec3){-1.0, 0.0, 0.0});
+    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, 0.0});
     glm_translate(modelViewMatrix, (vec3){0.0, 0.0, -1.0});
     glm_rotate(modelViewMatrix, Xangle, (vec3){1.0, 0.0, 0.0});
     glm_rotate(modelViewMatrix, Yangle, (vec3){0.0, 1.0, 0.0});
@@ -101,6 +106,13 @@ void display(void)
     glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
 
     int i;
+    for(i = 0; i < N_FACES; i++){
+        glDrawArrays(GL_TRIANGLE_STRIP, i * N_VERTICES, N_VERTICES);
+    }
+
+    glm_translate(modelViewMatrix, (vec3){-1.1, 0.0, 0.0});
+    glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
+
     for(i = 0; i < N_FACES; i++){
         glDrawArrays(GL_TRIANGLE_STRIP, i * N_VERTICES, N_VERTICES);
     }
@@ -180,8 +192,8 @@ void init(void) {
     glLinkProgram(programID);
     glUseProgram(programID);
 
-    glGenVertexArrays(1, vao);
-    glGenBuffers(1, buffer);
+    glGenVertexArrays(N_CUBES, vao);
+    glGenBuffers(N_CUBES, buffer);
 
     glBindVertexArray(vao[0]);
     glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
