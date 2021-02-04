@@ -36,48 +36,42 @@ typedef struct Vertex
 
 /** Vertici per una faccia del quadrato */
 static Vertex squareVertices[N_VERTICES * N_FACES] = {
-
-    /** Front face */
-
-    { {0.5, 0.5, 0.5, 1.0},      {0.0, 1.0, 0.0, 1.0} },
-    { {0.5, -0.5, 0.5, 1.0},     {0.0, 1.0, 0.0, 1.0} },
-    { {-0.5, 0.5, 0.5, 1.0},     {0.0, 1.0, 0.0, 1.0} },
-    { {-0.5, -0.5, 0.5, 1.0},    {0.0, 1.0, 0.0, 1.0} },
     
-    /** Left face */
+    //front
+    { {0.0, 0.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} },
+    { {0.0, 1.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} },
+    { {1.0, 0.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} },
+    { {1.0, 1.0, 1.0, 1.0},    {1.0, 0.0, 0.0, 1.0} },
 
-    { {-0.5, 0.5, 0.5, 1.0},     {1.0, 1.0, 0.0, 1.0} },
-    { {-0.5, -0.5, 0.5, 1.0},    {1.0, 1.0, 0.0, 1.0} },
-    { {-0.5, 0.5, -0.5, 1.0},    {1.0, 1.0, 0.0, 1.0} },
-    { {-0.5, -0.5, -0.5, 1.0},     {1.0, 1.0, 0.0, 1.0} },
+    //right
+    { {1.0, 0.0, 1.0, 1.0},    {1.0, 0.0, 1.0, 1.0} },
+    { {1.0, 1.0, 1.0, 1.0},    {1.0, 0.0, 1.0, 1.0} },
+    { {1.0, 0.0, 0.0, 1.0},    {1.0, 0.0, 1.0, 1.0} },
+    { {1.0, 1.0, 0.0, 1.0},    {1.0, 0.0, 1.0, 1.0} }, 
 
-    /** Back face */
+    //back
+    { {0.0, 0.0, 0.0, 1.0},    {0.0, 1.0, 0.0, 1.0} },
+    { {0.0, 1.0, 0.0, 1.0},    {0.0, 1.0, 0.0, 1.0} },
+    { {1.0, 0.0, 0.0, 1.0},    {0.0, 1.0, 0.0, 1.0} },
+    { {1.0, 1.0, 0.0, 1.0},    {0.0, 1.0, 0.0, 1.0} }, 
 
-    { {0.5, 0.5, -0.5, 1.0},   {1.0, 0.0, 0.0, 1.0} },
-    { {0.5, -0.5, -0.5, 1.0},   {1.0, 0.0, 0.0, 1.0} },
-    { {-0.5, 0.5, -0.5, 1.0},    {1.0, 0.0, 0.0, 1.0} },
-    { {-0.5, -0.5, -0.5, 1.0},  {1.0, 0.0, 0.0, 1.0} },
+    //left
+    { {0.0, 0.0, 0.0, 1.0},    {0.0, 1.0, 1.0, 1.0} },
+    { {0.0, 1.0, 0.0, 1.0},    {0.0, 1.0, 1.0, 1.0} },
+    { {0.0, 0.0, 1.0, 1.0},    {0.0, 1.0, 1.0, 1.0} },
+    { {0.0, 1.0, 1.0, 1.0},    {0.0, 1.0, 1.0, 1.0} },
 
-    /** Right face */
+    //over
+    { {0.0, 1.0, 0.0, 1.0},    {0.0, 0.0, 0.0, 1.0} },
+    { {0.0, 1.0, 1.0, 1.0},    {0.0, 0.0, 0.0, 1.0} }, 
+    { {1.0, 1.0, 0.0, 1.0},    {0.0, 0.0, 0.0, 1.0} },
+    { {1.0, 1.0, 1.0, 1.0},    {0.0, 0.0, 0.0, 1.0} },
 
-    { {0.5, 0.5, 0.5, 1.0},  {0.0, 0.0, 0.0, 1.0} },
-    { {0.5, -0.5, 0.5, 1.0},    {0.0, 0.0, 0.0, 1.0} },
-    { {0.5, 0.5, -0.5, 1.0},   {0.0, 0.0, 0.0, 1.0} },
-    { {0.5, -0.5, -0.5, 1.0},   {0.0, 0.0, 0.0, 1.0} }, 
-
-    /** Upper face */
-
-    { {0.5, 0.5, 0.5, 1.0},   {0.0, 0.0, 1.0, 1.0} },
-    { {0.5, 0.5, -0.5, 1.0},   {0.0, 0.0, 1.0, 1.0} },
-    { {-0.5, 0.5, 0.5, 1.0},  {0.0, 0.0, 1.0, 1.0} },
-    { {-0.5, 0.5, -0.5, 1.0},    {0.0, 0.0, 1.0, 1.0} },
-
-    /** Lower face */
- 
-    { {0.5, -0.5, 0.5, 1.0},    {1.0, 0.0, 1.0, 1.0} },
-    { {0.5, -0.5, -0.5, 1.0},    {1.0, 0.0, 1.0, 1.0} },
-    { {-0.5, -0.5, 0.5, 1.0},     {1.0, 0.0, 1.0, 1.0} },
-    { {-0.5, -0.5, -0.5, 1.0},   {1.0, 0.0, 1.0, 1.0} }
+    //bottom, ok
+    { {0.0, 0.0, 1.0, 1.0},    {0.0, 0.0, 1.0, 1.0} },
+    { {0.0, 0.0, 0.0, 1.0},    {0.0, 0.0, 1.0, 1.0} },
+    { {1.0, 0.0, 1.0, 1.0},    {0.0, 0.0, 1.0, 1.0} },
+    { {1.0, 0.0, 0.0, 1.0},    {0.0, 0.0, 1.0, 1.0} },
 
 };
 
@@ -99,18 +93,27 @@ void display(void)
 
     glm_translate(modelViewMatrix, (vec3){0.0, 0.0, ZtranslationValue});
     glm_translate(modelViewMatrix, (vec3){XtranslationValue, 0.0, 0.0,});
+    glm_translate(modelViewMatrix, (vec3){-1.0, 0.0, 0.0});
+    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, -1.0});
     glm_rotate(modelViewMatrix, Xangle, (vec3){1.0, 0.0, 0.0});
     glm_rotate(modelViewMatrix, Yangle, (vec3){0.0, 1.0, 0.0});
     glm_rotate(modelViewMatrix, Zangle, (vec3){0.0, 0.0, 1.0});
     glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
-/*
+
+    /*
     int i;
-    for(i = 0; i < N_FACES; i++){
-         glDrawArrays(GL_TRIANGLE_STRIP, i, N_VERTICES);
+    for(i = 0; i < 4; i++){
+        glDrawArrays(GL_TRIANGLE_STRIP, i * N_FACES, N_VERTICES);
     }
     */
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, N_VERTICES * N_FACES);
 
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, N_VERTICES);
+    glDrawArrays(GL_TRIANGLE_STRIP, 4, N_VERTICES);
+    glDrawArrays(GL_TRIANGLE_STRIP, 8, N_VERTICES);
+    glDrawArrays(GL_TRIANGLE_STRIP, 12, N_VERTICES);
+    glDrawArrays(GL_TRIANGLE_STRIP, 16, N_VERTICES);
+    glDrawArrays(GL_TRIANGLE_STRIP, 20, N_VERTICES);
+    
     glFlush();
 }
 
@@ -138,6 +141,13 @@ char* readTextFile(char* aTextFile)
 void init(void) {
     
     glClearColor(1.0, 1.0, 1.0, 0.0);
+
+    /**
+     * enabling depth test
+    */
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS);
 
     /** 
      * Creazione e compilazione del Vertex Shader
@@ -176,15 +186,7 @@ void init(void) {
     */
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[0]), 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[1]), (GLvoid *)sizeof(squareVertices[1].colors));
-    
-    /*
-     * Specifico come sono costruiti i dati nell'array dove sono salvati
-    */
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[0]), 0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[1]), (GLvoid*)sizeof(squareVertices[0].coords));
-
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(squareVertices[1]), (GLvoid *)sizeof(squareVertices[1].coords));  
     glEnableVertexAttribArray(1);
 
     /**
@@ -202,7 +204,7 @@ void init(void) {
     };*/
 
     projMatLoc = glGetUniformLocation(programID, "projMat");
-    glm_frustum(-1.0, 1.0, -1.0, 1.0, 0.2, 10.0, projMatrix);
+    glm_frustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10.0, projMatrix);
     glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, (GLfloat *)projMatrix);
 
     /**
@@ -308,10 +310,6 @@ int main(int argc, char **argv)
     glutInitContextProfile(GLUT_CORE_PROFILE);
     glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 
-    /*
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_ALWAYS);
-    */
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(150, 150);
