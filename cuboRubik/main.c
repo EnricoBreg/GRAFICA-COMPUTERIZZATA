@@ -1,7 +1,6 @@
 /*
-* Draw a cube ... VBO
+* Draw a cube ... VBO and Shaders
 */
-
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <stdio.h>
@@ -165,7 +164,6 @@ void init(void) {
      * enabling cullig
     */
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
 
     /** 
      * Creazione e compilazione del Vertex Shader
