@@ -10,9 +10,15 @@
 #include <math.h>
 
 /**
- * Number of cubes
-*/
-#define N_CUBES 2
+ * @brief Total number of cubes to draw 
+ * 
+ */
+#define N_CUBES 9
+
+/**
+ * @brief Number of cuber per row 
+ */
+#define CUBES_PER_ROW 3
 
 /**
  * 4 vertices per face
@@ -98,33 +104,33 @@ void display(void)
 
     glm_translate(modelViewMatrix, (vec3){0.0, 0.0, ZtranslationValue});
     glm_translate(modelViewMatrix, (vec3){XtranslationValue, 0.0, 0.0,});
-    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, 0.0});
-    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, -1.0});
+    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, -5.0});
     glm_rotate(modelViewMatrix, Xangle, (vec3){1.0, 0.0, 0.0});
     glm_rotate(modelViewMatrix, Yangle, (vec3){0.0, 1.0, 0.0});
     glm_rotate(modelViewMatrix, Zangle, (vec3){0.0, 0.0, 1.0});
     glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
 
-    int i;
-    for(i = 0; i < N_FACES; i++){
-        glDrawArrays(GL_TRIANGLE_STRIP, i * N_VERTICES, N_VERTICES);
+    int riga = 0, colonna = 0, profondita = 0, i;
+
+    for(profondita = 0; profondita < 3; profondita++){
+        glm_translate(modelViewMatrix, (vec3){0.0, 0.0, 1.1});
+        glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
+        for(colonna = 0; colonna < 3; colonna++){
+            glm_translate(modelViewMatrix, (vec3){0.0, 1.1, 0.0});
+            glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
+            for(riga = 0; riga < 3; riga++){
+                glm_translate(modelViewMatrix, (vec3){1.1, 0.0, 0.0});
+                glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
+                for(i = 0; i < N_FACES; i++){
+                    glDrawArrays(GL_TRIANGLE_STRIP, i * N_VERTICES, N_VERTICES);
+                }
+            }
+            glm_translate(modelViewMatrix, (vec3){-3.3, 0.0, 0.0});
+            glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
+        }
+        glm_translate(modelViewMatrix, (vec3){0.0, -3.3, 0.0});
+        glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
     }
-
-    glm_translate(modelViewMatrix, (vec3){-1.1, 0.0, 0.0});
-    glUniformMatrix4fv(modelViewMatLoc, 1, GL_FALSE, (GLfloat *)modelViewMatrix);
-
-    for(i = 0; i < N_FACES; i++){
-        glDrawArrays(GL_TRIANGLE_STRIP, i * N_VERTICES, N_VERTICES);
-    }
-
-    /*
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, N_VERTICES);
-    glDrawArrays(GL_TRIANGLE_STRIP, 4, N_VERTICES);
-    glDrawArrays(GL_TRIANGLE_STRIP, 8, N_VERTICES);
-    glDrawArrays(GL_TRIANGLE_STRIP, 12, N_VERTICES);
-    glDrawArrays(GL_TRIANGLE_STRIP, 16, N_VERTICES);
-    glDrawArrays(GL_TRIANGLE_STRIP, 20, N_VERTICES);
-    */
     
     glFlush();
 }
@@ -222,7 +228,7 @@ void init(void) {
     };*/
 
     projMatLoc = glGetUniformLocation(programID, "projMat");
-    glm_frustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10.0, projMatrix);
+    glm_frustum(-10.0, 10.0, -10.0, 10.0, 1.0, 100.0, projMatrix);
     glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, (GLfloat *)projMatrix);
 
     /**
