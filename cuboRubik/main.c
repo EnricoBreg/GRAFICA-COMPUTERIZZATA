@@ -103,7 +103,7 @@ void display(void)
 
     glm_translate(modelViewMatrix, (vec3){0.0, 0.0, ZtranslationValue});
     glm_translate(modelViewMatrix, (vec3){XtranslationValue, 0.0, 0.0,});
-    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, -5.0});
+    glm_translate(modelViewMatrix, (vec3){0.0, 0.0, -2.0});
     glm_rotate(modelViewMatrix, Xangle, (vec3){1.0, 0.0, 0.0});
     glm_rotate(modelViewMatrix, Yangle, (vec3){0.0, 1.0, 0.0});
     glm_rotate(modelViewMatrix, Zangle, (vec3){0.0, 0.0, 1.0});
@@ -225,7 +225,8 @@ void init(void) {
     };*/
 
     projMatLoc = glGetUniformLocation(programID, "projMat");
-    glm_frustum(-10.0, 10.0, -10.0, 10.0, 1.0, 100.0, projMatrix);
+    glm_ortho(-10.0, 10.0, -10.0, 10.0, -50.0, 50.0, projMatrix);
+    //glm_frustum(-10.0, 10.0, -10.0, 10.0, 1.0, 100.0, projMatrix);
     glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, (GLfloat *)projMatrix);
 
     /**
