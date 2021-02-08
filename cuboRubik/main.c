@@ -1,7 +1,6 @@
 /*
-* Draw a cube ... VBO
+* Draw a cube ... VBO and Shaders
 */
-
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <stdio.h>
@@ -97,7 +96,7 @@ static unsigned int programID, vertexShaderID, fragmentShaderID, modelViewMatLoc
   * Display routine 
   */
 void display(void)
-{
+{   
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm_mat4_identity(modelViewMatrix);
@@ -164,14 +163,12 @@ void init(void) {
      * enabling depth test
     */
     glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
 
     /**
-     * enabling cullig
+     * enabling culling
     */
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
 
     /** 
      * Creazione e compilazione del Vertex Shader
